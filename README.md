@@ -1,43 +1,100 @@
 # Mercado-Livre-E-Commerce-Analytics
-This capstone project leverages SQL, Power BI, and Python to analyze Mercado Livre’s e-commerce operations, uncovering actionable insights to drive revenue growth, enhance customer retention, and optimize logistics.
+##  **📌 Overview**
 
-Key Contributions:
-Advanced SQL Analytics
+This project analyzes Mercado Livre's e-commerce data (Brazil’s largest online marketplace) to uncover growth opportunities, optimize operations, and forecast sales trends. Leveraging SQL for data extraction, Power BI for visualization, and Python for predictive modeling, it delivers actionable insights into:
 
-Queried a large-scale e-commerce dataset to identify trends in revenue growth (699K% MoM spikes), customer lifetime value (top spender: R$13.6K), and product performance (120K% YoY growth in top categories).
+- Revenue volatility and seasonal trends
 
-Revealed critical gaps like low repeat purchase rates (3.12%) and inefficient logistics (only 4.41% on-time deliveries).
+- Customer retention gaps (only 3.12% repeat buyers)
 
-Interactive Power BI Dashboards
+- Logistics inefficiencies (4.41% on-time deliveries)
 
-Built a 6-page dashboard tracking KPIs across sales, customer behavior, product performance, and logistics.
+- High-potential product categories (120K% YoY growth)
 
-Highlighted actionable insights:
+🔗 Dataset: Download Here
 
-Revenue concentration in top categories (35% from 3 segments).
+# **🛠️ Tools & Technologies** 
 
-Geographic disparities (Northern states had 3× longer delivery times).
+- **SQL** (MySQL): Data extraction and aggregation.
 
-Payment dominance (73.9% revenue from credit cards).
+- Power BI: Interactive dashboards for stakeholder reporting.
 
-Python Forecasting & EDA
+- Python (Pandas, Scikit-learn, Statsmodels): EDA, time-series forecasting (Holt-Winters, Linear Regression).
 
-Forecasted revenue for 24 months using Holt-Winters Exponential Smoothing (MAE: 255K) and Linear Regression, identifying seasonal peaks (e.g., November 2017: R$1.19M revenue).
+- Jupyter Notebooks: Code documentation and analysis.
 
-Analyzed category-wise trends, recommending inventory prioritization for high-growth segments like health/beauty and electronics.
+## **📂 Project Structure**  
+```
+├── SQL_Queries/               # 12 Advanced SQL queries (e.g., MoM growth, CLTV)
+├── PowerBI_Dashboards/        # PBIX files & screenshots (6 thematic pages)
+├── Python_EDA_Forecasting/    # Jupyter notebooks for:
+│   ├── 1_Data_Cleaning.ipynb  
+│   ├── 2_Revenue_Forecasting.ipynb  
+│   └── 3_Category_Analysis.ipynb  
+├── Reports/                   # Key insights and recommendations (PDF/PPT)
+└── Resources/                 # Raw data, schemas, and helper scripts
 
-Strategic Recommendations
+```
+## 🔍 Key Insights
 
-Proposed loyalty programs for high-value customers, logistics partnerships to reduce delays, and targeted marketing for underperforming regions.
+1. **Revenue Trends**
 
-Tools Used: SQL (MySQL), Power BI, Python (Pandas, Scikit-learn, Statsmodels), Jupyter Notebooks.
-Dataset: Mercado Livre’s transactional data (orders, payments, customers, products).
+	- Extreme MoM volatility (e.g., 699K% growth in Jan 2017).
 
-Impact: Demonstrated how data-driven strategies can optimize marketplace operations, reduce churn, and capitalize on seasonal trends.
+	- Top categories (bed/bath, electronics) drove 35% of total revenue.
 
-Why This Stands Out:
-End-to-End Analytics: Covers data extraction (SQL), visualization (Power BI), and predictive modeling (Python).
+2. **Customer Behavior**
 
-Real-World Focus: Solutions address actual business pain points (e.g., retention, logistics).
+	- Avg. 80 days between 1st and 2nd purchase.
 
-Portfolio-Ready: Clear storytelling with quantifiable results and visual deliverables.
+	- Debit card users gave highest ratings (4.17/5).
+
+3. **Operational Gaps**
+
+	- Northern states had 30-day delivery delays (vs. national avg: 12.5 days).
+
+	- Sellers delivered 66 days earlier than estimated (algorithm recalibration needed).
+
+4. **Forecasting**
+
+	- Holt-Winters model outperformed Linear Regression (MAE: 255K vs. 845K).
+
+# 🚀 How to Reproduce
+1. **SQL Setup:**
+
+```
+-- Example: Monthly Revenue Growth Query
+WITH monthly_revenue AS (...)
+SELECT revenue_month, total_revenue, 
+       (total_revenue - LAG(total_revenue) OVER (ORDER BY revenue_month)) / 
+       NULLIF(LAG(total_revenue) OVER (ORDER BY revenue_month), 0) * 100 AS growth_pct
+FROM monthly_revenue;
+
+```
+2. **Power BI:**  Import processed data and customize dashboards.
+
+3. **Python:**  Install dependencies via requirements.txt and run notebooks.
+
+
+# 📈 Deliverables
+
+12 SQL Queries (View Samples)
+
+Power BI Dashboard (Screenshots)
+
+Forecasting Models (Code)
+
+Strategic Recommendations (PDF)
+
+# 💡 Lessons Learned
+
+Data Challenges: Handling date formats in SQL-Python integration.
+
+Model Selection: Exponential Smoothing beat Linear Regression for seasonal data.
+
+Stakeholder Focus: Dashboards prioritized KPIs like repeat purchase rate and delivery efficiency.
+
+# 🌟 Showcase:
+
+Adapt this for LinkedIn/portfolio with a focus on business impact (e.g., "Identified R$1.19M revenue opportunity in top categories").
+	
