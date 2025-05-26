@@ -1,8 +1,5 @@
 create database  mercado_livre;
-select * from orders;
-select date(order_purchase_timestamp) from orders;
 
-select round(sum(price),2) as total_revenue from order_items; 
 -- Monthly Revenue Growth Rate: For each month, calculate total revenue and month-over-month growth percentage.
 
 
@@ -35,6 +32,7 @@ SELECT
     ) AS month_over_month_growth_pct
 FROM
     monthly_growth;
+
 -- Trailing 3-Month Moving Average of Orders: For each month, calculate the 3-month moving average of the number of orders.
 
 WITH monthly_orders AS (
@@ -230,136 +228,7 @@ LIMIT 10;
 
 
 
-SELECT 
-    oi.seller_id,
-    ROUND(AVG(DATEDIFF(o.order_delivered_customer_date, o.order_estimated_delivery_date)), 2) AS avg_delivery_delay_days
-FROM 
-    orders o
-JOIN 
-    order_items oi ON o.order_id = oi.order_id
-WHERE 
-    o.order_delivered_customer_date IS NOT NULL
-    AND o.order_estimated_delivery_date IS NOT NULL
-GROUP BY 
-    oi.seller_id
-ORDER BY 
-    avg_delivery_delay_days ASC
-LIMIT 10;
-
-
-
-SELECT 
-    oi.seller_id,
-    ROUND(AVG(DATEDIFF(o.order_delivered_customer_date, o.order_estimated_delivery_date)), 2) AS avg_delivery_delay_days,
-    CASE 
-        WHEN ROUND(AVG(DATEDIFF(o.order_delivered_customer_date, o.order_estimated_delivery_date)), 2) < 0 THEN 'Early Delivery'
-        WHEN ROUND(AVG(DATEDIFF(o.order_delivered_customer_date, o.order_estimated_delivery_date)), 2) = 0 THEN 'On Time'
-        ELSE 'Late Delivery'
-    END AS delivery_status
-FROM 
-    orders o
-JOIN 
-    order_items oi ON o.order_id = oi.order_id
-WHERE 
-    o.order_delivered_customer_date IS NOT NULL
-    AND o.order_estimated_delivery_date IS NOT NULL
-GROUP BY 
-    oi.seller_id
-ORDER BY 
-    avg_delivery_delay_days ASC
-LIMIT 10;
-
-
-SELECT 
-    seller_id,
-    ROUND(AVG(DATEDIFF(order_estimated_delivery_date, order_delivered_customer_date)), 2) AS flipped_avg_diff
-FROM 
-    orders o
-JOIN 
-    order_items oi ON o.order_id = oi.order_id
-WHERE 
-    order_delivered_customer_date IS NOT NULL 
-    AND order_estimated_delivery_date IS NOT NULL
-GROUP BY 
-    seller_id
-ORDER BY 
-    flipped_avg_diff DESC
-    limit 10;
-
-
-
-
--- Time to First Purchase: For customers with multiple orders, calculate the average number of days between account creation and first purchase.
-
-
-
-
-WITH customer_first_last AS (
-    SELECT 
-        c.customer_unique_id,
-        MIN(o.order_purchase_timestamp) AS first_purchase,
-        MAX(o.order_purchase_timestamp) AS last_purchase,
-        COUNT(o.order_id) AS total_orders
-    FROM orders o
-    join customers c 
-    on c.customer_id=o.customer_id
-    GROUP BY customer_unique_id
-    HAVING COUNT(order_id) > 1
-),
-days_diff AS (
-    SELECT 
-        customer_unique_id,
-        DATEDIFF(first_purchase, last_purchase) AS days_to_first_purchase
-    FROM customer_first_last
-)
-SELECT 
-    ROUND(AVG(ABS(days_to_first_purchase)), 2) AS avg_days_to_first_purchase
-FROM days_diff;
-
-
-
-
-
-
-WITH customer_orders_ranked AS (
-    SELECT 
-        customer_id,
-        order_purchase_timestamp,
-        ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_purchase_timestamp) AS purchase_rank
-    FROM orders
-),
-first_second_purchases AS (
-    SELECT 
-        customer_id,
-        MAX(CASE WHEN purchase_rank = 1 THEN order_purchase_timestamp END) AS first_purchase,
-        MAX(CASE WHEN purchase_rank = 2 THEN order_purchase_timestamp END) AS second_purchase
-    FROM customer_orders_ranked
-    GROUP BY customer_id
-),
-valid_customers AS (
-    SELECT 
-        customer_id,
-        DATEDIFF(second_purchase, first_purchase) AS days_to_first_purchase
-    FROM first_second_purchases
-    WHERE second_purchase IS NOT NULL
-)
-SELECT 
-    ROUND(AVG(days_to_first_purchase), 2) AS avg_days_to_first_purchase
-FROM valid_customers;
-
-
-
-
-
-SELECT 
-    customer_id,
-    COUNT(order_id) AS total_orders
-FROM orders
-GROUP BY customer_id
-HAVING COUNT(order_id) > 1
-ORDER BY total_orders DESC;
-
-
+-- Time to second Purchase: For customers with multiple orders, calculate the average number of days between first purchase and second purchase.
 
 
 
@@ -459,27 +328,6 @@ ORDER BY
 
 -- Repeat Purchase Analysis: What percentage of customers placed more than one order?
 
-
-WITH customer_order_counts AS (
-    SELECT 
-        customer_id,
-        COUNT(order_id) AS order_count
-    FROM orders
-    GROUP BY customer_id
-)
-
-SELECT 
-    ROUND(
-        100.0 * COUNT(CASE WHEN order_count > 1 THEN 1 END) 
-        / COUNT(*), 
-        2
-    ) AS repeat_purchase_percentage
-FROM customer_order_counts;
-
-
-
-
-
 with customer_count as 
 (
 SELECT 
@@ -503,22 +351,10 @@ FROM
 
 
 
-SELECT 
-    COUNT(*) AS repeat_customers
-FROM (
-    SELECT customer_id
-    FROM orders
-    GROUP BY customer_id
-    HAVING COUNT(order_id) > 1
-) AS repeat_customer_table;
-
-
-
-
-
-
 -- Top SKUs by Profit Contribution: Calculate profit per SKU (price - freight + volume assumption), then list top 10 contributors.
 
+-- there are two methods for handling volume
+--1.General way but there is a small problem that revenue is considered as negligible
 
 SELECT 
     oi.product_id,
@@ -532,7 +368,7 @@ ORDER BY total_profit DESC
 LIMIT 10;
 
 
-
+--2. More appropriate way because revenue take some weighted here
 
 SELECT 
     oi.product_id,
@@ -545,54 +381,4 @@ GROUP BY oi.product_id
 ORDER BY total_profit DESC
 LIMIT 10;
 
-
-
-
--- Step 1: Define both profit methods
-WITH unscaled_profit AS (
-    SELECT 
-        oi.product_id,
-        ROUND(SUM(oi.price - oi.freight_value + 
-            (p.product_length_cm * p.product_height_cm * p.product_width_cm)), 2) AS total_profit_unscaled
-    FROM order_items oi
-    JOIN products p ON oi.product_id = p.product_id
-    GROUP BY oi.product_id
-),
-scaled_profit AS (
-    SELECT 
-        oi.product_id,
-        ROUND(SUM(oi.price - oi.freight_value + 
-            (p.product_length_cm * p.product_height_cm * p.product_width_cm) / 1000), 2) AS total_profit_scaled
-    FROM order_items oi
-    JOIN products p ON oi.product_id = p.product_id
-    GROUP BY oi.product_id
-)
-
--- Step 2: Join both and rank
-SELECT 
-    sp.product_id,
-    sp.total_profit_scaled,
-    usp.total_profit_unscaled
-FROM scaled_profit sp
-JOIN unscaled_profit usp ON sp.product_id = usp.product_id
-ORDER BY sp.total_profit_scaled DESC
-LIMIT 10;
-
-
-
-
-
-SELECT customer_id, MIN(order_purchase_timestamp) AS first_purchase, 
-       MAX(order_purchase_timestamp) AS last_purchase
-FROM orders
-GROUP BY customer_id
-HAVING COUNT(order_id) > 1;
-WITH customer_order_count AS (
-    SELECT customer_id, COUNT(order_id) AS total_orders
-    FROM orders
-    GROUP BY customer_id
-)
-SELECT 
-    ROUND(100.0 * COUNT(CASE WHEN total_orders > 1 THEN 1 END) / COUNT(*), 2) AS repeat_purchase_percent
-FROM customer_order_count;
 
