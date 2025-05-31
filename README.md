@@ -78,11 +78,11 @@ FROM monthly_revenue;
 
 # 📈 Deliverables
 
-[12 SQL Queries (View Samples)](./sql_query)
+[12 SQL Queries (View Samples)](./sql%20query)
 
-[Power BI Dashboard (Screenshots)](./Power_BI)
+[Power BI Dashboard (Screenshots)](./Power%20BI)
 
-[Forecasting Models (Code)](./Python_analysis)
+[Forecasting Models (Code)](./Python%20analysis)
 
 [Strategic Recommendations (PDF)](./actionable.pdf)
 
