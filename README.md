@@ -13,7 +13,7 @@ This project analyzes Mercado Livre's e-commerce data (Brazil’s largest online
 
 🔗 Dataset: Download Here
 
-# **🛠️ Tools & Technologies** 
+## **🛠️ Tools & Technologies** 
 
 - **SQL** (MySQL): Data extraction and aggregation.
 
@@ -59,7 +59,7 @@ This project analyzes Mercado Livre's e-commerce data (Brazil’s largest online
 
 	- Holt-Winters model outperformed Linear Regression (MAE: 255K vs. 845K).
 
-# 🚀 How to Reproduce
+## 🚀 How to Reproduce
 1. **SQL Setup:**
 
 ```
@@ -76,7 +76,7 @@ FROM monthly_revenue;
 3. **Python:**  Install dependencies via requirements.txt and run notebooks.
 
 
-# 📈 Deliverables
+## 📈 Deliverables
 
 [12 SQL Queries (View Samples)](./sql%20query/mercado%20livre%20capstone%20project.sql)
 
@@ -86,7 +86,7 @@ FROM monthly_revenue;
 
 [Strategic Recommendations (PDF)](./actionable.pdf)
 
-# 💡 Lessons Learned
+## 💡 Lessons Learned
 
 Data Challenges: Handling date formats in SQL-Python integration.
 
@@ -94,7 +94,7 @@ Model Selection: Exponential Smoothing beat Linear Regression for seasonal data.
 
 Stakeholder Focus: Dashboards prioritized KPIs like repeat purchase rate and delivery efficiency.
 
-# 🌟 Showcase:
+## 🌟 Showcase:
 
 Adapt this for LinkedIn/portfolio with a focus on business impact (e.g., "Identified R$1.19M revenue opportunity in top categories").
 	
