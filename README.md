@@ -78,7 +78,7 @@ FROM monthly_revenue;
 
 # 📈 Deliverables
 
-[12 SQL Queries (View Samples)](./sql%20query/results)
+[12 SQL Queries (View Samples)](./sql%20query/mercado%20livre%20capstone%20project.sql)
 
 [Power BI Dashboard (Screenshots)](./Power%20BI)
 
