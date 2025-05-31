@@ -82,7 +82,7 @@ FROM monthly_revenue;
 
 [Power BI Dashboard (Screenshots)](./Power%20BI)
 
-[Forecasting Models (Code)](./Python%20analysis)
+[Forecasting Models (Code)](./Python%20analysis/capestone%20.ipynb)
 
 [Strategic Recommendations (PDF)](./actionable.pdf)
 
