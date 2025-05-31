@@ -24,7 +24,7 @@ This project analyzes Mercado Livre's e-commerce data (Brazil’s largest online
 - Jupyter Notebooks: Code documentation and analysis.
 
 ## **📂 Project Structure**  
-```
+```bash
 ├── SQL_Queries/               # 12 Advanced SQL queries (e.g., MoM growth, CLTV)
 ├── PowerBI_Dashboards/        # PBIX files & screenshots (6 thematic pages)
 ├── Python_EDA_Forecasting/    # Jupyter notebooks for:
@@ -62,7 +62,7 @@ This project analyzes Mercado Livre's e-commerce data (Brazil’s largest online
 ## 🚀 How to Reproduce
 1. **SQL Setup:**
 
-```
+```sql
 -- Example: Monthly Revenue Growth Query
 WITH monthly_revenue AS (...)
 SELECT revenue_month, total_revenue, 
@@ -97,4 +97,10 @@ Stakeholder Focus: Dashboards prioritized KPIs like repeat purchase rate and del
 ## 🌟 Showcase:
 
 Adapt this for LinkedIn/portfolio with a focus on business impact (e.g., "Identified R$1.19M revenue opportunity in top categories").
+
+MIT License
+
+Copyright (c) [2025] [sagarkumar49]
+
+[Paste standard MIT text from https://opensource.org/license/mit/]
 	
