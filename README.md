@@ -78,7 +78,7 @@ FROM monthly_revenue;
 
 # 📈 Deliverables
 
-[12 SQL Queries (View Samples)](./sql%20query)
+[12 SQL Queries (View Samples)](./sql%20query/results)
 
 [Power BI Dashboard (Screenshots)](./Power%20BI)
 
